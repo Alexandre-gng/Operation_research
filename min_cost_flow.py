@@ -5,7 +5,6 @@ def bellman_ford_residual(n, residual_cost, source):
     pred = [(-1, -1)] * n  # (u,v) arc utilisé pour atteindre v
     dist[source] = 0
 
-    # Relaxation
     for _ in range(n - 1):
         updated = False
         for u in range(n):
@@ -27,16 +26,6 @@ def bellman_ford_residual(n, residual_cost, source):
 
 
 def min_cost_flow(n, capacities, costs, target_flow, labels=None):
-    """
-    Résout le flot à coût minimal en poussant target_flow unités.
-    Affiche un tableau des chemins d'augmentation avec push/capacité résiduelle.
-
-    - n : nombre de nœuds (indices 0..n-1)
-    - capacities[u][v] : capacité de l'arc u->v (0 si pas d'arc)
-    - costs[u][v] : coût unitaire de u->v
-    - target_flow : flot total souhaité depuis 0 vers n-1
-    - labels : liste facultative de noms de nœuds, ex ['s','a','b','c','d','e','t']
-    """
     if labels is None:
         labels = [str(i) for i in range(n)]
     assert len(labels) == n
@@ -113,5 +102,5 @@ def min_cost_flow(n, capacities, costs, target_flow, labels=None):
 
     if total_flow < target_flow:
         print(f"(Flot atteint = {total_flow}, but {target_flow} demandé.)")
-
+        
     return total_cost, flow
