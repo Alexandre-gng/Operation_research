@@ -18,6 +18,7 @@ def push_relabel(n, capacities):
     active_nodes = [i for i in range(n) if i != s and i != t and excess[i] > 0]
     
     while active_nodes:
+        print("Active nodes:", active_nodes)  # Debug: afficher les noeuds actifs
         u = active_nodes[0]
         pushed = False
         
