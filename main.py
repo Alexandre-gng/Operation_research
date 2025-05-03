@@ -52,7 +52,12 @@ def main():
                     continue
                     
                 max_flow, _ = ford_fulkerson(n, capacities)
-                target_flow = max_flow // 2
+                target_flow = max_flow + 1
+                while target_flow < 1 or target_flow > max_flow:
+                    print(f"Valeur max: {max_flow/2}") 
+                    target_flow = input("Flot cible : ")
+                    target_flow = int(target_flow)
+
                 print(f"\nCalcul du flot à coût minimal pour une valeur de {target_flow}")
                 
                 total_cost, flow_matrix = min_cost_flow(n, capacities, costs, target_flow)
