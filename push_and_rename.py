@@ -1,3 +1,5 @@
+from tools import print_mat_flot
+
 def push_relabel(n, capacities):
     # Initialisation
     flow = [[0] * n for _ in range(n)]
@@ -36,6 +38,7 @@ def push_relabel(n, capacities):
                 if excess[u] == 0:
                     active_nodes.remove(u)
                     break
+        print_mat_flot(flow, capacities)
         
         if not pushed and excess[u] > 0:
             # Réétiqueter

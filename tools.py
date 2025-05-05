@@ -3,8 +3,7 @@ from collections import deque
 def print_mat_flot(matrice_flot, capacites):
     n = len(matrice_flot)
 
-    # Calculer les largeurs maximales nécessaires pour chaque colonne
-    max_widths = [5] * n  # Largeur minimale par défaut
+    max_widths = [5] * n
 
     for j in range(n):
         for i in range(n):
@@ -12,11 +11,9 @@ def print_mat_flot(matrice_flot, capacites):
                 cell_content = f"{matrice_flot[i][j]}/{capacites[i][j]}" if matrice_flot[i][j] > 0 else "0"
                 max_widths[j] = max(max_widths[j], len(cell_content))
 
-    # Afficher l'en-tête
     header = "   " + " ".join(f"{i:^{max_widths[j]}}" for j, i in enumerate(range(n)))
     print(header)
 
-    # Afficher les lignes de données
     for i in range(n):
         row_str = f"{i:2} "
         for j in range(n):

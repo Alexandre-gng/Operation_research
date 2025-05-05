@@ -1,11 +1,10 @@
 from tools import bfs, print_mat_flot
 
 def ford_fulkerson(num_nodes, capacity_graph):
-    # Initialisation des structures de données
     residual_graph = [row[:] for row in capacity_graph]
     flow_matrix = [[0] * num_nodes for _ in range(num_nodes)]
     max_flow_value = 0
-    start_node, end_node = 0, num_nodes - 1  # Noeuds source et puits
+    start_node, end_node = 0, num_nodes - 1
     iteration = 0
 
     print("=== Initialisation ===")
@@ -16,7 +15,6 @@ def ford_fulkerson(num_nodes, capacity_graph):
         if not find_augmenting_path(residual_graph, num_nodes, start_node, end_node, parent_nodes):
             break
 
-        # Détermination du chemin et du flux maximal
         path_flow = float("inf")
         path_edges = []
         node = end_node
@@ -25,13 +23,12 @@ def ford_fulkerson(num_nodes, capacity_graph):
             path_flow = min(path_flow, residual_graph[prev_node][node])
             path_edges.append((prev_node, node))
             node = prev_node
-        path_edges.reverse()  # Pour afficher de la source au puits
+        path_edges.reverse()
 
         print(f"\n=== Itération {iteration} ===")
         print(f"Chemin augmentant: {' -> '.join(f'{u}->{v}' for u, v in path_edges)}")
         print(f"Flux ajouté: {path_flow}")
 
-        # Mise à jour des flux
         node = end_node
         while node != start_node:
             prev_node = parent_nodes[node]
@@ -47,7 +44,7 @@ def ford_fulkerson(num_nodes, capacity_graph):
 
     print(f"\n=== Résultat final ===")
     print(f"Flux maximal: {max_flow_value}")
-    print("Matrice de flux finale:")
+    print("Matrice de flot finale:")
     show_flow_matrix(flow_matrix, capacity_graph)
 
     return max_flow_value, flow_matrix
@@ -69,5 +66,14 @@ def find_augmenting_path(residual_graph, num_nodes, start_node, end_node, parent
     return False
 
 def show_flow_matrix(flow_matrix, capacity_graph):
-    for row in flow_matrix:
-        print(row)
+    num_rows = len(flow_matrix)
+    num_cols = len(flow_matrix[0]) if num_rows > 0 else 0
+
+    col_labels = [i for i in range(0, num_cols)]
+
+    print("   " + " ".join(f"{label:>3}" for label in col_labels))
+    print("  " + "-" * (4 * num_cols + 2))
+
+    for idx, row in enumerate(flow_matrix):
+        row_label = idx
+        print(f"{row_label} |" + " ".join(f"{val:>3}" for val in row))

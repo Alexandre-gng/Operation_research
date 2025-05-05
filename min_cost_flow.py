@@ -2,7 +2,8 @@ from tabulate import tabulate
 
 def bellman_ford_residual(n, residual_cost, source):
     dist = [float('inf')] * n
-    pred = [(-1, -1)] * n  # (u,v) arc utilisé pour atteindre v
+    # (u,v) arc utilisé pour atteindre v
+    pred = [(-1, -1)] * n 
     dist[source] = 0
 
     for _ in range(n - 1):
@@ -16,7 +17,6 @@ def bellman_ford_residual(n, residual_cost, source):
         if not updated:
             break
 
-    # Détection de cycle négatif (optionnel)
     for u in range(n):
         for v, cost_uv in residual_cost[u].items():
             if dist[u] + cost_uv < dist[v]:
@@ -29,14 +29,13 @@ def min_cost_flow(n, capacities, costs, target_flow, labels=None):
     if labels is None:
         labels = [str(i) for i in range(n)]
     assert len(labels) == n
-
+    
     flow = [[0]*n for _ in range(n)]
     total_flow = 0
     total_cost = 0
     history = []
 
     while total_flow < target_flow:
-        # 1) Construire le graphe résiduel
         residual_cap = [dict() for _ in range(n)]
         residual_cost = [dict() for _ in range(n)]
         for u in range(n):
@@ -48,11 +47,9 @@ def min_cost_flow(n, capacities, costs, target_flow, labels=None):
                         residual_cap[u][v] = remain
                         residual_cost[u][v] = costs[u][v]
                     if flow[u][v] > 0:
-                        # arc inverse
                         residual_cap[v][u] = flow[u][v]
                         residual_cost[v][u] = -costs[u][v]
 
-        # 2) Plus court chemin dans le résiduel
         try:
             dist, pred = bellman_ford_residual(n, residual_cost, 0)
         except ValueError as e:
@@ -63,7 +60,6 @@ def min_cost_flow(n, capacities, costs, target_flow, labels=None):
             print("Plus de chemin améliorant — flot max résiduel atteint.")
             break
 
-        # 3) Remonter le chemin et calculer le push
         path = []
         v = n-1
         while v != 0:
@@ -72,12 +68,10 @@ def min_cost_flow(n, capacities, costs, target_flow, labels=None):
             v = u
         path.reverse()
 
-        # 4) Déterminer le flot qu'on peut y pousser
         push = target_flow - total_flow
         for u, v in path:
             push = min(push, residual_cap[u][v])
 
-        # 5) Enregistrer la ligne du tableau d’itération
         row = { name: "" for name in labels }
         for u, v in path:
             cap_before = residual_cap[u][v]
